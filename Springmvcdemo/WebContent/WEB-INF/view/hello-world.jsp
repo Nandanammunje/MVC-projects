@@ -4,14 +4,12 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Registration Form</title>
 </head>
 <body>
-Hi hello this is my first project
-<a href="show">Go to query section</a>
-
-
-
-
+<form action="editor" method="get">
+<input type="text" name="studentname"  placeholder="Enter your name ">
+<input type="submit" name="submit query">
+</form>
 </body>
 </html>

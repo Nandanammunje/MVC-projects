@@ -7,11 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-Hi hello this is my first project
-<a href="show">Go to query section</a>
-
-
-
-
+Hello world of spring
+<br><br>
+Student name: ${param.studentname}
+<br><br>
+message:${message}
 </body>
 </html>
