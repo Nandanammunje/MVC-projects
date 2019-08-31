@@ -11,6 +11,6 @@ Hello world of spring
 <br><br>
 Student name: ${param.studentname}
 <br><br>
-message:${message}
+message:${greetings}
 </body>
 </html>
