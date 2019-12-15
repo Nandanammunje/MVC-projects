@@ -1,0 +1,15 @@
+jcs.region.customercache=DC
+jcs.region.customercache.cacheattributes=
+org.apache.jcs.engine.CompositeCacheAttributes
+jcs.region.customercache.cacheattributes.MaxObjects=1000
+jcs.region.customercache.cacheattributes.MemoryCacheName=org.apache.jcs.engine.memory.lru.LRUMemoryCache
+jcs.region.customercache.cacheattributes.UseMemoryShrinker=true
+jcs.region.customercache.cacheattributes.MaxMemoryIdleTimeSeconds=3600
+jcs.region.customercache.cacheattributes.ShrinkerIntervalSeconds=60
+jcs.region.customercache.cacheattributes.MaxSpoolPerRun=500
+jcs.region.customercache.elementattributes.IdleTime=1800
+jcs.region.customercache.elementattributes=org.apache.jcs.engine.ElementAttributes
+jcs.region.customercache.elementattributes.IsEternal=false
+jcs.region.customercache.elementattributes.IsSpool=true
+jcs.region.customercache.elementattributes.IsRemote=true
+jcs.region.customercache.elementattributes.IsLateral=true
