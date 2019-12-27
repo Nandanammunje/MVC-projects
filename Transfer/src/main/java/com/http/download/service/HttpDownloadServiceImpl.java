@@ -19,12 +19,13 @@ import org.springframework.stereotype.Service;
 public class HttpDownloadServiceImpl implements HttpDownloadService {
 
 	@Override
-	public void SaveDocument() {
+	public void SaveDocument(String pth) {
 		// TODO Auto-generated method stub
+		
 		HttpClient client=HttpClientBuilder.create().build();
-		HttpPost post=new HttpPost("http://192.168.1.100:9097/documents/gate/EC_2003.pdf");
+		HttpPost post=new HttpPost("http://192.168.1.102:9097/documents/gate/"+pth+".pdf");
 		             try {
-		            	OutputStream outstream=new FileOutputStream("C:/Users/nandannayak/Videos/Captures/EC_2003.pdf"); 
+		            	OutputStream outstream=new FileOutputStream("C:/docdownloads/"+pth+".pdf"); 
 							
 							
 						HttpResponse response=client.execute(post);
