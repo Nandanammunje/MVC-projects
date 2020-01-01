@@ -19,7 +19,8 @@ public class DownloadController {
 	public String GetDocument(Model model)
 	{
 		Pathfinder find=new Pathfinder();
-		System.out.println(service.GetDocList());
+		for(String s:service.GetDocList())
+			
 		model.addAttribute("pathfinder",find);
 		return "FTP";
 	}

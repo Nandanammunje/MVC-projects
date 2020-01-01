@@ -3,7 +3,7 @@ package com.http.download.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.http.downoad.Dao.HttpDownloadDao;
+import com.http.download.Dao.HttpDownloadDao;
 
 @Service
 public class HttpDownloadServiceImpl implements HttpDownloadService {
