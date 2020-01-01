@@ -1,7 +1,5 @@
 package com.http.download.config;
 
-import javax.security.auth.login.AppConfigurationEntry;
-
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class Myservletdispatchintializer extends AbstractAnnotationConfigDispatcherServletInitializer {

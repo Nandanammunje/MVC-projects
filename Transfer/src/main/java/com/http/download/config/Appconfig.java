@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
-@ComponentScan("com.http.download")
+@ComponentScan("com.http")
 @EnableWebMvc
 public class Appconfig {
 
@@ -18,8 +18,8 @@ public class Appconfig {
 	public ViewResolver viewResolver()
 	{
 		InternalResourceViewResolver view =new InternalResourceViewResolver();
-		view.setPrefix("/WEB-INF/view/");
-		view.setSuffix(".jsp");
+		view.setPrefix(BackendConstants.DISPATCHERPATHPREFIX);
+		view.setSuffix(BackendConstants.DISPATCHERPATHSUFFIX);
 		return view; 
 	}
 }
