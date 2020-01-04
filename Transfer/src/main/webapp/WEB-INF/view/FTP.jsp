@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +16,16 @@
 <td><label>Enter the name of the document</label></td>
 <td><form:input path="path"/></td>
 </tr>
+<tr>
+<td>list of documents</td>
+</tr>
+<tr>
+</tr>
+<c:forEach var="docname" items="${service}">
+<tr>
+<td>${docname}</td>
+</tr>
+</c:forEach>
 <tr>
 <td><input type="submit" value="submit"></td>
 </tr>
