@@ -6,21 +6,21 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>File Transfer Portal</title>
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css"/>
 </head>
 <body>
 <h1>WELCOME TO FILE TRANSFER PORTAL</h1>
+
 <form:form action="getdoc" modelAttribute="pathfinder" method="GET">
+<label>Enter the name of the document</label>
+<form:input path="path"/>
+<span style="padding-bottom:100px; "></span>
+
+
+
+
 <table>
-<tbody>
-<tr>
-<td><label>Enter the name of the document</label></td>
-<td><form:input path="path"/></td>
-</tr>
-<tr>
-<td>list of documents</td>
-</tr>
-<tr>
-</tr>
+<tr><td>Available Document List<td></tr>
 <c:forEach var="docname" items="${service}">
 <tr>
 <td>${docname}</td>
