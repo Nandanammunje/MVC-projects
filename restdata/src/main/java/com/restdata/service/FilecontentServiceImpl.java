@@ -17,4 +17,10 @@ public class FilecontentServiceImpl implements FilecontentService {
 		return filecontentdao.filecontent();
 	}
 
+	@Override
+	public String filelastmodified() {
+		// TODO Auto-generated method stub
+		return filecontentdao.filelastmodified();
+	}
+
 }
