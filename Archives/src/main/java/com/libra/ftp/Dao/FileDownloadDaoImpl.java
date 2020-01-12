@@ -1,5 +1,6 @@
 package com.libra.ftp.Dao;
 
+import java.awt.CardLayout;
 import java.io.IOException;
 
 import org.apache.http.HttpEntity;
@@ -33,7 +34,7 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 		    if(BookList!=null && BookList.length!=0)
 		    {
 		    logger.debug("extracted from the cache"+BookList.length);
-		    logger.debug("cace stats"+cache.getStats());
+		    logger.debug("cache stats"+cache.getStats());
 		    System.out.println("extracted from cache");
 		    }
 		    else
@@ -54,6 +55,35 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 			logger.error("Exception occured"+e);
 		}
 		return BookList;
+	}
+	@Override
+	public String[] GetCacheData() {
+		// TODO Auto-generated method stub
+		JCS cache;
+		String CachedBookList[]=null;
+	  try
+	  {
+		  cache=JCS.getInstance("library");
+		  CachedBookList=(String [])cache.get("Books");
+		  if(CachedBookList!=null && CachedBookList.length > 0 )
+		  {
+			  logger.debug("properties exist in the cache "+cache.getStats());
+		  }
+		  else
+		  {
+			  String s[]=new String[1];
+			  s[0]="Cache is Cleared";
+			  
+			  logger.info("cache is empty"+cache.getStats());
+			  return s;
+		  }
+	  }
+	  catch(CacheException e)
+	  {
+		  logger.error("encountered cache exception"+e);
+	  }
+	    
+	  return CachedBookList;
 	}
 
 }

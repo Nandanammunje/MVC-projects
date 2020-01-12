@@ -17,4 +17,10 @@ public class FileDownloadServiceImpl implements FileDownloadService
 		return filedownloaddao.GetDocList();
 	}
 
+	@Override
+	public String[] GetCacheData() {
+		// TODO Auto-generated method stub
+	  return filedownloaddao.GetCacheData();
+	}
+
 }

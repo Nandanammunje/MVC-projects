@@ -31,6 +31,17 @@ public class FileDownloadController {
 		
 		return "FTP";
 	}
+	  @GetMapping("/sac")
+	  public String GetCachedProperties(ModelMap modelmap)
+	  {
+		  String s[]=service.GetCacheData();
+		  if(s==null || s.length==0)
+		  {
+			  s[0]="cache is empty";
+		  }
+		  modelmap.addAttribute("cachedproperties",s);
+		  return "SAC";
+	  }
 	  
 
 }
