@@ -31,7 +31,15 @@ public class FileDownloadController {
 		
 		return "FTP";
 	}
-	  @GetMapping("/sac")
+	
+	@GetMapping("/sac")
+    public String CachingConsole()
+    {
+	     return "JCS";	
+     }
+	
+	
+	  @GetMapping("/viewcache")
 	  public String GetCachedProperties(ModelMap modelmap)
 	  {
 		  String s[]=service.GetCacheData();
@@ -43,5 +51,12 @@ public class FileDownloadController {
 		  return "SAC";
 	  }
 	  
+	  @GetMapping("/clearcache")
+	  public String GetCacheClear()
+	  {
+		  service.CacheClear();
+		  return "redirect:/sac";
+		  
+	  }
 
 }

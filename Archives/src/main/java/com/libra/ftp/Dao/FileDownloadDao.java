@@ -4,5 +4,6 @@ public interface FileDownloadDao {
 
 	public String[] GetDocList();
 	public String[] GetCacheData();
+	public void CacheClear();
 	
 }

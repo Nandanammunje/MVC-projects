@@ -1,6 +1,5 @@
 package com.libra.ftp.Dao;
 
-import java.awt.CardLayout;
 import java.io.IOException;
 
 import org.apache.http.HttpEntity;
@@ -84,6 +83,22 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 	  }
 	    
 	  return CachedBookList;
+	}
+	@Override
+	public void CacheClear() {
+		// TODO Auto-generated method stub
+		JCS cache;
+		try
+		{
+			cache=JCS.getInstance("library");
+			cache.clear();
+			logger.info("Cache cleared");
+		}
+		
+		catch(CacheException e)
+		{
+			logger.error("encountered cache exception"+e);
+		}
 	}
 
 }

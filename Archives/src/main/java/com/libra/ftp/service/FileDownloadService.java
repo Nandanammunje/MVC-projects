@@ -4,5 +4,6 @@ public interface FileDownloadService {
 	
 	public String[] GetDocList();
 	public String[] GetCacheData();
+	public void CacheClear();
 
 }

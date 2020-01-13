@@ -23,4 +23,11 @@ public class FileDownloadServiceImpl implements FileDownloadService
 	  return filedownloaddao.GetCacheData();
 	}
 
+	@Override
+	public void CacheClear() {
+		// TODO Auto-generated method stub
+		filedownloaddao.CacheClear();
+	}
+	
+
 }
