@@ -1,9 +1,13 @@
 package com.libra.ftp.Dao;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -99,6 +103,35 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 		{
 			logger.error("encountered cache exception"+e);
 		}
+	}
+	@Override
+	public void GetDoc(String filename) {
+		// TODO Auto-generated method stub
+		String url=BackendConstants.DOCURL+filename;
+		String downloadpath=BackendConstants.DOWNLOADDOCLOCATION+filename;
+		HttpClient client=HttpClientBuilder.create().build();
+		HttpPost post=new HttpPost(url);
+		OutputStream outstream=null;
+		try {
+			outstream = new FileOutputStream(downloadpath);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			logger.error("failed to save the  document "+e1);
+		}
+		try {
+			HttpResponse response=client.execute(post);
+			HttpEntity entity=response.getEntity();
+	   entity.writeTo(outstream);
+	   outstream.close();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			logger.error("failed to download document "+e);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+		logger.error("error while saving the document "+e);
+		}
+		
+		
 	}
 
 }

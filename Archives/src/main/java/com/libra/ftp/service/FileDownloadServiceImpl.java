@@ -28,6 +28,12 @@ public class FileDownloadServiceImpl implements FileDownloadService
 		// TODO Auto-generated method stub
 		filedownloaddao.CacheClear();
 	}
+
+	@Override
+	public void GetDoc(String filename) {
+		// TODO Auto-generated method stub
+		filedownloaddao.GetDoc(filename);
+	}
 	
 
 }

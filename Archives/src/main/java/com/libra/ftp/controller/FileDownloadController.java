@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import com.libra.ftp.Entity.PathFinder;
 import com.libra.ftp.service.FileDownloadService;
 
 @Controller
@@ -23,12 +26,10 @@ public class FileDownloadController {
 	@GetMapping("/list")
 	public String GetDocument(ModelMap model)
 	{
-		
+		PathFinder path=new PathFinder();
 		String s[]=service.GetDocList();
-		System.out.print(s.length);
-		
-		model.addAttribute("names",s);
-		
+	    model.addAttribute("names",s);
+		model.addAttribute("docname",path);
 		return "FTP";
 	}
 	
@@ -57,6 +58,14 @@ public class FileDownloadController {
 		  service.CacheClear();
 		  return "redirect:/sac";
 		  
+	  }
+	  @PostMapping("/savedocument")
+	  public String Archive(@ModelAttribute("docname") PathFinder find)
+	  {
+		  String filename=find.getPath();
+		 System.out.println(filename);
+		  service.GetDoc(filename);
+		  return "index";
 	  }
 
 }
