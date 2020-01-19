@@ -9,4 +9,5 @@ public class BackendConstants {
 	public static final String DOCURL="http://localhost:9097/documents/gate/";
 	public static final String DOWNLOADDOCLOCATION="C:/docdownloads/";
 	public static final String FILEEXTENSION=".pdf";
+	public static final String FILEMODIFIEDTIME="http://localhost:9097/restdata/getdata/getlastmodifiedtime";
 }

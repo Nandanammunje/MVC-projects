@@ -9,12 +9,10 @@
 <%@ page isELIgnored="false" %>
 </head>
 <body>
+<input type="button" value="UploadFile" onclick="window.location.href='upload';return false;" class="add-button"/>
 <form:form action="savedocument" modelAttribute="docname" method="POST">
 <label>Enter The Name of the Document</label>
 <form:input path="path"/>
-
-
-
 <br><br>
 <input type="submit" value="download"/>
 </form:form>

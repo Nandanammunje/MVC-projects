@@ -1,11 +1,23 @@
 package com.libra.ftp.controller;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.servlet.annotation.MultipartConfig;
+
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.libra.ftp.Entity.PathFinder;
 import com.libra.ftp.service.FileDownloadService;
@@ -66,6 +78,21 @@ public class FileDownloadController {
 		 System.out.println(filename);
 		  service.GetDoc(filename);
 		  return "index";
+	  }
+	  @GetMapping("/upload")
+	  public String fileupload()
+	  {
+		  return "FileUpload";
+	  }
+	  
+	  @PostMapping("/UploadDoc")
+	  public String SaveUploadedDoc(@RequestParam("file") MultipartFile file,Model model) throws IOException
+	  {
+		 
+		 FileOutputStream out=new FileOutputStream("C:/Gate-ECE/"+file.getOriginalFilename());
+		  out.write(file.getBytes());
+		  out.close();
+		  return "FileUpload";
 	  }
 
 }
