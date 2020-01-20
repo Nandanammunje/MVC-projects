@@ -4,6 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,6 +34,8 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 		// TODO Auto-generated method stub
 		HttpClient client=HttpClientBuilder.create().build();
 		HttpPost post=new HttpPost(BackendConstants.LIBRAARCHIVELISTURL);
+	
+		
 		String BookList[]=null;
 		JCS cache;
 		try {
@@ -133,5 +140,5 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 		
 		
 	}
-
+	
 }

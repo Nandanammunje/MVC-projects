@@ -1,14 +1,8 @@
 package com.libra.ftp.controller;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
-import javax.servlet.annotation.MultipartConfig;
-
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -90,9 +84,11 @@ public class FileDownloadController {
 	  {
 		 
 		 FileOutputStream out=new FileOutputStream("C:/Gate-ECE/"+file.getOriginalFilename());
+		 
 		  out.write(file.getBytes());
 		  out.close();
-		  return "FileUpload";
+		  service.CacheClear();
+		  return "redirect:/list";
 	  }
 
 }
