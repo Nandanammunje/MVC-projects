@@ -1,7 +1,5 @@
 package com.libra.service.entity;
 
-import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,8 +16,8 @@ public class Downloadreport {
 	private int id;
 	@Column(name="name")
 	private String name;
-	@Column(name="Logtpime")
-	private Date date;
+	@Column(name="logtime")
+	private String logtime;
 	public int getId() {
 		return id;
 	}
@@ -32,11 +30,11 @@ public class Downloadreport {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getDate() {
-		return date;
+	public String getlogtime() {
+		return logtime;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public void setString(String logtime) {
+		this.logtime = logtime;
 	}
 	
 	
