@@ -19,6 +19,7 @@ public class DownloadReportController {
 	public int SaveReport(@RequestBody Downloadreport report)
 	{
 		report.setId(0);
+		System.out.println(report.getLogtime());
 		service.Save(report);
 		
 		return 1;

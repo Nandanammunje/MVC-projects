@@ -1,11 +1,19 @@
 package com.libra.service.entity;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+/**
+ * @author nandannayak
+ *
+ */
 @Entity
 @Table(name="downloadreport")
 public class Downloadreport {
@@ -17,7 +25,8 @@ public class Downloadreport {
 	@Column(name="name")
 	private String name;
 	@Column(name="logtime")
-	private String logtime;
+@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	private Date logtime;
 	public int getId() {
 		return id;
 	}
@@ -30,12 +39,13 @@ public class Downloadreport {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getlogtime() {
+	public Date getLogtime() {
 		return logtime;
 	}
-	public void setString(String logtime) {
+	public void setLogtime(Date logtime) {
 		this.logtime = logtime;
 	}
+	
 	
 	
 	
