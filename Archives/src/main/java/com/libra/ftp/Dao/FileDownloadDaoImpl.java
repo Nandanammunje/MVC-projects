@@ -1,13 +1,14 @@
 package com.libra.ftp.Dao;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.http.HttpEntity;
@@ -15,6 +16,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.jcs.JCS;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.libra.ftp.Constants.BackendConstants;
+import com.libra.ftp.Entity.DownloadReport;
 
 @Repository
 public class FileDownloadDaoImpl implements FileDownloadDao {
@@ -117,6 +120,7 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 		String url=BackendConstants.DOCURL+filename;
 		String downloadpath=BackendConstants.DOWNLOADDOCLOCATION+filename;
 		HttpClient client=HttpClientBuilder.create().build();
+		
 		HttpPost post=new HttpPost(url);
 		OutputStream outstream=null;
 		try {
@@ -129,7 +133,9 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 			HttpResponse response=client.execute(post);
 			HttpEntity entity=response.getEntity();
 	   entity.writeTo(outstream);
+	   PushLibraArchiva(filename);
 	   outstream.close();
+	   
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			logger.error("failed to download document "+e);
@@ -139,6 +145,62 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 		}
 		
 		
+	} 
+	
+	public void PushLibraArchiva(String bookname)
+	{
+		SimpleDateFormat dateformat=new SimpleDateFormat(BackendConstants.DATEPATTERN);
+		SimpleDateFormat logdate=new SimpleDateFormat(BackendConstants.WEBSVCLOGPATTERN);
+	  HttpClient client=HttpClientBuilder.create().build();
+	   HttpPost post=new HttpPost(BackendConstants.LIBRADBPUSHURL);
+	    String path=BackendConstants.WEBSVCLOGLOCATION+"-"+logdate.format(new Date())+BackendConstants.LOGEXT;
+	    
+	    File file = new File(path);
+	    FileWriter fr;
+	    BufferedWriter br;
+	
+	   
+	  
+	   DownloadReport report=new DownloadReport();
+	   report.setName(bookname);
+	   report.setLogtime(dateformat.format(new Date()));
+	   try
+	   {
+		   
+		   ObjectMapper map=new ObjectMapper();
+		   String json=map.writeValueAsString(report);
+		 
+		   post.addHeader("Content-type","application/json");
+		   HttpEntity entity=new StringEntity(json);
+		   
+		   post.setEntity(entity);
+		   HttpResponse response=client.execute(post);
+		   System.out.println(response);
+		   if (response==null||response.getStatusLine().getStatusCode()!=200)
+		   { 
+			  
+			   System.out.println("lok");
+			   fr = new FileWriter(file,true);
+			  
+				br= new BufferedWriter(fr);
+				String data="{"+"name:"+bookname+","+"logtime:"+dateformat.format(new Date())+"}";
+				br.write(data);
+				br.close();
+				fr.close();
+				
+		   }
+		   System.out.println(response);
+	   }
+	   catch(ClientProtocolException e)
+	   {
+		   logger.error("error while pushing the data into the service"+e);
+	   } catch (UnsupportedEncodingException e) {
+		// TODO Auto-generated catch block
+	              logger.error("error encoding with json format"+e);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		logger.error("failed to push data"+e);
+	}
 	}
 	
 }
