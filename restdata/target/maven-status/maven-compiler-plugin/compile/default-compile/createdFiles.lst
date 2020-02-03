@@ -1,8 +1,0 @@
-com\restdata\service\FilecontentServiceImpl.class
-com\restdata\controller\FilecontentRestController.class
-com\restdata\config\MyServletDispatcher.class
-com\restdata\service\FilecontentService.class
-com\restdata\dao\FilecontentDaoImpl.class
-com\restdata\config\AppConfig.class
-com\restdata\dao\FilecontentDao.class
-com\restdata\config\BackendConstants.class
