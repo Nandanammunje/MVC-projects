@@ -183,8 +183,8 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 			   fr = new FileWriter(file,true);
 			  
 				br= new BufferedWriter(fr);
-				String data="{"+"name:"+bookname+","+"logtime:"+dateformat.format(new Date())+"}";
-				br.write(data);
+			
+				br.write(json+"|");
 				br.close();
 				fr.close();
 				
