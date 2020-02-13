@@ -2,18 +2,12 @@ package com.pushlog.entity;
 
 import java.sql.Date;
 
-public class DownloadReport {
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-	
-	private int id;
-	private String name;
+public class DownloadReport {
+    private String name;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	private Date logtime;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}

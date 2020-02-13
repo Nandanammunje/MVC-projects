@@ -14,7 +14,7 @@ public class Starter {
 			ClassPathXmlApplicationContext context=new ClassPathXmlApplicationContext("Application-Context.xml");
 			ReadSvclog read=context.getBean("readlog",ReadSvclog.class);
 	               List<String> content=read.ReadLog(BackendConstants.WEBSVCLOGPATH);
-	                                      //System.out.println(read.GetReportType(content));
+	                      // System.out.println(read.GetReportType(content));
 	
 	                                          
 	
