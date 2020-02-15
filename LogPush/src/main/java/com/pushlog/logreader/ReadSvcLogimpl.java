@@ -4,14 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
-import org.springframework.format.datetime.DateFormatter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pushlog.constants.BackendConstants;
@@ -55,7 +51,7 @@ public class ReadSvcLogimpl implements ReadSvclog {
 		// TODO Auto-generated method stub
 		List<DownloadReport> report=new ArrayList<DownloadReport>();
 		int begin=0;
-		List<String> data=new ArrayList<String>();
+		
 		ObjectMapper map=new ObjectMapper();
 		for(String s:path)
 		{
@@ -69,17 +65,18 @@ public class ReadSvcLogimpl implements ReadSvclog {
 				{
 					
 					try {
+						
 						report.add(map.readValue(s.substring(begin,i+1),DownloadReport.class));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
 				
-			}
+				}
 		}
+		
+	}
 		return report;
 	}
-
 }
 
