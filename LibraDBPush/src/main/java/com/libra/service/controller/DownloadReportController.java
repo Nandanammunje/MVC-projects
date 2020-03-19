@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libra.service.entity.Downloadreport;
+import com.libra.service.entity.UploadReport;
 import com.libra.service.service.DownloadReportService;
 
 @RestController
@@ -25,5 +26,12 @@ public class DownloadReportController {
 		return 1;
 	}
 	
-	
+	@PostMapping("/saverecord")
+	public int SaveRecord(@RequestBody UploadReport report)
+	{
+		report.setId(0);
+		System.out.println(report.getLogtime());
+		service.Save(report);
+		return 1;
+	}
 }
