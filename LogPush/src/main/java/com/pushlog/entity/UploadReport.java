@@ -10,22 +10,26 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-@JsonIgnoreProperties(ignoreUnknown =true)
+
 @Entity
-@Table(name="downloadreport")
-public class DownloadReport {
+@Table(name="uploadreport")
+public class UploadReport {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name="id")
 	private int id;
-	@Column(name = "name")
-    private String name;
-	@Column(name = "logtime")
+	@Column(name="name")
+	private String name;
+	@Column(name="logtime")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
-    private Date logtime;
-	
-	
+	private Date logtime;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
@@ -38,12 +42,12 @@ public class DownloadReport {
 	public void setLogtime(Date logtime) {
 		this.logtime = logtime;
 	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	
+	
+	
+	
+	
+	
 	
 	
 }

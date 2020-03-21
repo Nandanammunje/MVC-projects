@@ -12,6 +12,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pushlog.constants.BackendConstants;
 import com.pushlog.entity.DownloadReport;
+import com.pushlog.entity.UploadReport;
 
 public class ReadSvcLogimpl implements ReadSvclog {
 
@@ -41,13 +42,14 @@ public class ReadSvcLogimpl implements ReadSvclog {
 			br.close();
 		} catch ( IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			return null;
 		}
 		return collect;
 	}
 
 	@Override
-	public List<DownloadReport> GetReportType(List<String> path) {
+	public List<DownloadReport> GetDownloadReportType(List<String> path) {
 		// TODO Auto-generated method stub
 		List<DownloadReport> report=new ArrayList<DownloadReport>();
 		int begin=0;
@@ -70,6 +72,40 @@ public class ReadSvcLogimpl implements ReadSvclog {
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					}
+				
+				}
+		}
+		
+	}
+		return report;
+	}
+
+	@Override
+	public List<UploadReport> GetUploadReportType(List<String> path) {
+		// TODO Auto-generated method stub
+		List<UploadReport> report=new ArrayList<UploadReport>();
+		int begin=0;
+		ObjectMapper map=new ObjectMapper();
+		for(String s:path)
+		{
+			for(int i=0;i<s.length();i++)
+			{
+				if(s.charAt(i)=='{')
+				{
+					begin=i;
+				}
+				if(s.charAt(i)=='}')
+				{
+					
+					try {
+						
+						report.add(map.readValue(s.substring(begin,i+1),UploadReport.class));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						
+						e.printStackTrace();
+						
 					}
 				
 				}
