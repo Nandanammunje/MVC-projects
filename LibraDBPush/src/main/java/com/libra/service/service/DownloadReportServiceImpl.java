@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.libra.service.Dao.DownloadDao;
+import com.libra.service.entity.DownloadFrequency;
 import com.libra.service.entity.Downloadreport;
 import com.libra.service.entity.UploadReport;
 @Service
@@ -23,6 +24,12 @@ public class DownloadReportServiceImpl  implements DownloadReportService {
     @Transactional
 	@Override
 	public void Save(UploadReport report) {
+		// TODO Auto-generated method stub
+		dao.Save(report);
+	}
+    @Transactional
+	@Override
+	public void Save(DownloadFrequency report) {
 		// TODO Auto-generated method stub
 		dao.Save(report);
 	}

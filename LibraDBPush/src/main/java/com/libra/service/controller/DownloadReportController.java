@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.libra.service.entity.DownloadFrequency;
 import com.libra.service.entity.Downloadreport;
 import com.libra.service.entity.UploadReport;
 import com.libra.service.service.DownloadReportService;
@@ -19,10 +20,12 @@ public class DownloadReportController {
 	@PostMapping("/savereport")
 	public int SaveReport(@RequestBody Downloadreport report)
 	{
+		DownloadFrequency frequency=new DownloadFrequency();
 		report.setId(0);
 		System.out.println(report.getLogtime());
 		service.Save(report);
-		
+		frequency.setName(report.getName());
+		service.Save(frequency);
 		return 1;
 	}
 	
@@ -34,4 +37,5 @@ public class DownloadReportController {
 		service.Save(report);
 		return 1;
 	}
+	
 }
