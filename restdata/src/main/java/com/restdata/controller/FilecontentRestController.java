@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +34,11 @@ public class FilecontentRestController {
             	return filecontentservice.filelastmodified();
             }
 	
-	
+	              @GetMapping("/CacheClear")
+	              public String CacheController()
+	              {
+	            	 filecontentservice.CacheClear();
+	            	 return "cache is cleared";
+	            	 
+	              }
 }

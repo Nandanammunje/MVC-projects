@@ -4,5 +4,6 @@ public interface FilecontentDao {
 	
 	public String[] filecontent();
 	public String filelastmodified();
+	public void CacheClear();
     
 }

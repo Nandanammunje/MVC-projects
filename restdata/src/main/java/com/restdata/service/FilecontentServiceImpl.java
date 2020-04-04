@@ -23,4 +23,10 @@ public class FilecontentServiceImpl implements FilecontentService {
 		return filecontentdao.filelastmodified();
 	}
 
+	@Override
+	public void CacheClear() {
+		// TODO Auto-generated method stub
+		filecontentdao.CacheClear();
+	}
+
 }

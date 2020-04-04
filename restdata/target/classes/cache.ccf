@@ -1,0 +1,12 @@
+jcs.region.book=DISK_REGION
+jcs.region.book.cacheattributes=org.apache.jcs.engine.CompositeCacheAttributes
+jcs.region.book.cacheattributes.MaxObjects=1000
+jcs.region.book.cacheattributes.MemoryCacheName=org.apache.jcs.engine.memory.lru.LRUMemoryCache
+jcs.region.book.elementattributes.MaxLifeSeconds=3600
+jcs.region.elementattributes.IdleTime=1800
+jcs.region.book.cacheattributes.UseMemoryShrinker=true
+jcs.region.book.cacheattributes.MaxMemoryIdleTimeSeconds=3600
+jcs.region.book.cacheattributes.ShrinkerIntervalSeconds=60
+jcs.region.book.cacheattributes.MaxSpoolPerRun=500
+jcs.region.book.elementattributes=org.apache.jcs.engine.ElementAttributes
+jcs.region.book.elementattributes.IsEternal=false
