@@ -15,4 +15,7 @@ public class BackendConstants {
 	public static final String WEBSVCLOGPATTERN="dd-MM-yyyy";
 	public static final String WEBSVCLOGLOCATION="C:/WebsvcLogs/Websvclog";
 	public static final String LOGEXT=".log";
+	public static final String LIBRAUPLOADREPORT="http://localhost:9097/LibraDBPush/saverecord";
+	public static final String WEBSVCLOGUPLOAD="C:/WebsvcLogs/WebsvcUplog";
+	public static final String LIBRAMQURL="http://localhost:8080/queue/push";
 }

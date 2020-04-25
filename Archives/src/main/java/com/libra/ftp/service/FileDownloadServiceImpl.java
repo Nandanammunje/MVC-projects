@@ -34,6 +34,12 @@ public class FileDownloadServiceImpl implements FileDownloadService
 		// TODO Auto-generated method stub
 		filedownloaddao.GetDoc(filename);
 	}
+
+	@Override
+	public void PushLibraUpFile(String filename) {
+		// TODO Auto-generated method stub
+		filedownloaddao.PushLibraUpFile(filename);
+	}
 	
 
 }

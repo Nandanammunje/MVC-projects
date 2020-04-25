@@ -84,9 +84,10 @@ public class FileDownloadController {
 	  {
 		 
 		 FileOutputStream out=new FileOutputStream("C:/Gate-ECE/"+file.getOriginalFilename());
-		 
+		   
 		  out.write(file.getBytes());
 		  out.close();
+		 service.PushLibraUpFile(file.getOriginalFilename());
 		  service.CacheClear();
 		  return "redirect:/list";
 	  }

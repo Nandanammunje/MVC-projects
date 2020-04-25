@@ -6,5 +6,5 @@ public interface FileDownloadService {
 	public String[] GetCacheData();
 	public void CacheClear();
 	public void GetDoc(String filename);
-
+    public void PushLibraUpFile(String filename);
 }

@@ -8,8 +8,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,11 +31,15 @@ import org.apache.http.util.EntityUtils;
 import org.apache.jcs.JCS;
 import org.apache.jcs.access.exception.CacheException;
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.AsyncRestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.libra.ftp.Constants.BackendConstants;
 import com.libra.ftp.Entity.DownloadReport;
+import com.libra.ftp.Entity.UploadReport;
 
 @Repository
 public class FileDownloadDaoImpl implements FileDownloadDao {
@@ -52,7 +65,7 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 		    }
 		    else
 		    {
-		    	logger.info("cache status before addition"+cache.getStats());
+		    logger.info("cache status before addition"+cache.getStats());
 			HttpResponse response=client.execute(post);
 			HttpEntity entity=response.getEntity();
 			String content=EntityUtils.toString(entity);
@@ -151,14 +164,19 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 	{
 		SimpleDateFormat dateformat=new SimpleDateFormat(BackendConstants.DATEPATTERN);
 		SimpleDateFormat logdate=new SimpleDateFormat(BackendConstants.WEBSVCLOGPATTERN);
-	  HttpClient client=HttpClientBuilder.create().build();
-	   HttpPost post=new HttpPost(BackendConstants.LIBRADBPUSHURL);
+	
 	    String path=BackendConstants.WEBSVCLOGLOCATION+"-"+logdate.format(new Date())+BackendConstants.LOGEXT;
 	    
 	    File file = new File(path);
 	    FileWriter fr;
 	    BufferedWriter br;
-	
+	   
+	    WebTarget target = ClientBuilder.newClient().target(BackendConstants.LIBRAMQURL);
+	   
+	  
+	    
+	  
+	    
 	   
 	  
 	   DownloadReport report=new DownloadReport();
@@ -169,38 +187,67 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 		   
 		   ObjectMapper map=new ObjectMapper();
 		   String json=map.writeValueAsString(report);
-		 
-		   post.addHeader("Content-type","application/json");
-		   HttpEntity entity=new StringEntity(json);
-		   
-		   post.setEntity(entity);
-		   HttpResponse response=client.execute(post);
-		   System.out.println(response);
-		   if (response==null||response.getStatusLine().getStatusCode()!=200)
-		   { 
+		   Response response = null;
+		try {
+			response = target.request().async().post(Entity.entity(json,MediaType.APPLICATION_JSON)).get();
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(response.getStatus()!=200)  
+		{
+			fr = new FileWriter(file,true);
 			  
-			   System.out.println("lok");
-			   fr = new FileWriter(file,true);
-			  
-				br= new BufferedWriter(fr);
-			
-				br.write(json+"|");
-				br.close();
-				fr.close();
-				
-		   }
-		   System.out.println(response);
-	   }
-	   catch(ClientProtocolException e)
-	   {
-		   logger.error("error while pushing the data into the service"+e);
-	   } catch (UnsupportedEncodingException e) {
-		// TODO Auto-generated catch block
-	              logger.error("error encoding with json format"+e);
+			br= new BufferedWriter(fr);
+		
+			br.write(json+"|");
+			br.close();
+			fr.close();
+		}
+		  
+		  
+	   
+	 
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		logger.error("failed to push data"+e);
 	}
 	}
-	
+	public void PushLibraUpFile(String filename)
+	{
+		SimpleDateFormat formatlog=new SimpleDateFormat(BackendConstants.WEBSVCLOGPATTERN);
+		SimpleDateFormat dateformat=new SimpleDateFormat(BackendConstants.DATEPATTERN);
+		HttpClient client= HttpClientBuilder.create().build();
+		HttpPost post=new HttpPost(BackendConstants.LIBRAUPLOADREPORT);
+		String path=BackendConstants.WEBSVCLOGUPLOAD+"-"+formatlog.format(new Date())+BackendConstants.LOGEXT;
+		File file = new File(path);
+	    FileWriter fr;
+	    BufferedWriter br;
+		
+		UploadReport report=new UploadReport();
+		report.setName(filename);
+		report.setLogtime(dateformat.format(new Date()));
+         ObjectMapper map=new ObjectMapper();
+         try {
+			String json=map.writeValueAsString(report);
+			post.addHeader("Content-type","application/json");
+			HttpEntity entity=new StringEntity(json);
+			post.setEntity(entity);
+			HttpResponse response=client.execute(post);
+			if(response==null ||response.getStatusLine().getStatusCode()!=200)
+			{
+				fr = new FileWriter(file,true);
+				  
+				br= new BufferedWriter(fr);
+			
+				br.write(json+"|");
+				br.close();
+				fr.close();
+			}
+			System.out.println(response);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error("failed to push data"+e);
+		}
+	}
 }
