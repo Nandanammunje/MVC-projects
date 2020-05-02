@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.libra.queue.Constants.Constants;
 import com.libra.queue.Entity.DownloadReport;
+import com.libra.queue.Entity.UploadReport;
 
 @SuppressWarnings("deprecation")
 @Repository
@@ -53,7 +54,6 @@ public class LibraMqDaoImpl implements LibraMqDao {
 	@RabbitListener(queues = "libradownload")
 	public void PushData(String message) {
 
-		
 		SaveDBSvc(message);
 
 	}
@@ -93,6 +93,20 @@ public class LibraMqDaoImpl implements LibraMqDao {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void SaveUpload(UploadReport report) {
+		// TODO Auto-generated method stub
+		ObjectMapper map = new ObjectMapper();
+		String json = null;
+		try {
+			json = map.writeValueAsString(report);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		template.convertAndSend("libraupload", json);
 	}
 
 }

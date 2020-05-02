@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.libra.queue.Dao.LibraMqDao;
 import com.libra.queue.Entity.DownloadReport;
+import com.libra.queue.Entity.UploadReport;
 
 @Service
 public class LibraMqServiceImpl implements LibraMqService {
@@ -18,6 +19,13 @@ public class LibraMqServiceImpl implements LibraMqService {
 		// TODO Auto-generated method stub
 		
 		dao.SaveBook(report);
+	}
+
+
+	@Override
+	public void SaveUpload(UploadReport report) {
+		// TODO Auto-generated method stub
+		dao.SaveUpload(report);
 	}
 
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libra.queue.Entity.DownloadReport;
+import com.libra.queue.Entity.UploadReport;
 import com.libra.queue.Service.LibraMqService;
 
 @RestController
@@ -21,5 +22,10 @@ public class LibraMqController {
               service.SaveBook(report);
               return report;
 	}
-
+       @PostMapping("/upload")
+       public UploadReport Save(@RequestBody UploadReport report)
+       {
+    	   service.SaveUpload(report);
+    	   return report;
+       }
 }
