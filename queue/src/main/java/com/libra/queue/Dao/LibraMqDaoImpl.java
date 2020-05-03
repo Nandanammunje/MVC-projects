@@ -52,45 +52,76 @@ public class LibraMqDaoImpl implements LibraMqDao {
 	}
 
 	@RabbitListener(queues = "libradownload")
-	public void PushData(String message) {
+	public void PushDownloadData(String message) {
 
-		SaveDBSvc(message);
+		SaveDBDownloadSvc(message);
+
+	}
+
+	@RabbitListener(queues = "libraupload")
+	public void PushUploadData(String message) {
+
+		System.out.println(message);
+		SaveDBUploadSvc(message);
+	}
+
+	@SuppressWarnings("deprecation")
+	public void SaveDBUploadSvc(String jsondata) {
+		AsyncRestTemplate rest = new AsyncRestTemplate();
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> requestEntity = new HttpEntity<>(jsondata, header);
+
+		try {
+			int statuscode = rest.exchange(Constants.LIBRADBPUSHURL, HttpMethod.POST, requestEntity, String.class).get()
+					.getStatusCodeValue();
+		}
+
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			LogWrite(jsondata, Constants.UPLOADTYPE);
+		}
+
+	}
+
+	public void LogWrite(String jsondata, String Logtype) {
+		SimpleDateFormat formatlog = new SimpleDateFormat(Constants.WEBSVCLOGPATTERN);
+		String path;
+		if (Logtype.equals(Constants.UPLOADTYPE))
+			path = Constants.WEBSVCLOGUPLOAD + "-" + formatlog.format(new Date()) + Constants.LOGEXT;
+		else
+			path = Constants.WEBSVCLOGLOCATION + "-" + formatlog.format(new Date()) + Constants.LOGEXT;
+		File file = new File(path);
+		FileWriter fr;
+		BufferedWriter br;
+		try {
+			fr = new FileWriter(file, true);
+
+			br = new BufferedWriter(fr);
+
+			br.write(jsondata + "|");
+			br.close();
+			fr.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	@SuppressWarnings("deprecation")
-	public void SaveDBSvc(String jsondata) {
+	public void SaveDBDownloadSvc(String jsondata) {
 		System.out.println(jsondata);
 		AsyncRestTemplate rest = new AsyncRestTemplate();
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> requestEntity = new HttpEntity<String>(jsondata, header);
-		ListenableFuture<ResponseEntity<String>> future = rest.exchange(Constants.LIBRADBSVCPUSHDOWNLOADREPORT,
-				HttpMethod.POST, requestEntity, String.class);
+		
 		try {
-			if (future.get().getStatusCodeValue() != 200) {
-				SimpleDateFormat formatlog = new SimpleDateFormat(Constants.WEBSVCLOGPATTERN);
-				String path = Constants.WEBSVCLOGLOCATION + "-" + formatlog.format(new Date()) + Constants.LOGEXT;
-				File file = new File(path);
-				FileWriter fr;
-				BufferedWriter br;
-				fr = new FileWriter(file, true);
-
-				br = new BufferedWriter(fr);
-
-				br.write(jsondata + "|");
-				br.close();
-				fr.close();
+			 int statuscode = rest.exchange(Constants.LIBRADBSVCPUSHDOWNLOADREPORT,HttpMethod.POST, requestEntity, String.class).get().getStatusCodeValue();
 			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		catch(Exception e)
+		{
+			LogWrite(jsondata,Constants.DOWNLOADTYPE);
 		}
 
 	}
