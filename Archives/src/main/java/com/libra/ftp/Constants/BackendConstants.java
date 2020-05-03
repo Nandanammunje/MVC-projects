@@ -18,4 +18,5 @@ public class BackendConstants {
 	public static final String LIBRAUPLOADREPORT="http://localhost:9097/LibraDBPush/saverecord";
 	public static final String WEBSVCLOGUPLOAD="C:/WebsvcLogs/WebsvcUplog";
 	public static final String LIBRAMQURL="http://localhost:8080/queue/push";
+	public static final String LIBRAMQUPLOADURL="http://localhost:8080/queue/upload";
 }

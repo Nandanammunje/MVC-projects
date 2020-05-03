@@ -198,38 +198,54 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 	}
 
 	public void PushLibraUpFile(String filename) {
-		SimpleDateFormat formatlog = new SimpleDateFormat(BackendConstants.WEBSVCLOGPATTERN);
 		SimpleDateFormat dateformat = new SimpleDateFormat(BackendConstants.DATEPATTERN);
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpPost post = new HttpPost(BackendConstants.LIBRAUPLOADREPORT);
-		String path = BackendConstants.WEBSVCLOGUPLOAD + "-" + formatlog.format(new Date()) + BackendConstants.LOGEXT;
-		File file = new File(path);
-		FileWriter fr;
-		BufferedWriter br;
+
+		WebTarget targetMQ = ClientBuilder.newClient().target(BackendConstants.LIBRAMQUPLOADURL);
 
 		UploadReport report = new UploadReport();
 		report.setName(filename);
 		report.setLogtime(dateformat.format(new Date()));
-		ObjectMapper map = new ObjectMapper();
+		
 		try {
+
+			ObjectMapper map = new ObjectMapper();
 			String json = map.writeValueAsString(report);
-			post.addHeader("Content-type", "application/json");
-			HttpEntity entity = new StringEntity(json);
-			post.setEntity(entity);
-			HttpResponse response = client.execute(post);
-			if (response == null || response.getStatusLine().getStatusCode() != 200) {
-				fr = new FileWriter(file, true);
-
-				br = new BufferedWriter(fr);
-
-				br.write(json + "|");
-				br.close();
-				fr.close();
+			Response response = null;
+			try {
+				response = targetMQ.request().async().post(Entity.entity(json, MediaType.APPLICATION_JSON)).get();
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+             PushLibraUploadReport(json);
 			}
-			System.out.println(response);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			logger.error("failed to push data" + e);
 		}
+	}
+	
+	public void PushLibraUploadReport(String jsondata)
+	{
+		SimpleDateFormat logdate = new SimpleDateFormat(BackendConstants.WEBSVCLOGPATTERN);
+		String path = BackendConstants.WEBSVCLOGUPLOAD + "-" + logdate.format(new Date()) + BackendConstants.LOGEXT;
+		File file = new File(path);
+		FileWriter fr = null;
+		BufferedWriter br;
+		Future<Response> response;
+		WebTarget DBSvc = ClientBuilder.newClient().target(BackendConstants.LIBRAUPLOADREPORT);
+		response = DBSvc.request().async().post(Entity.entity(jsondata, MediaType.APPLICATION_JSON));
+		if (response == null) {
+			try {
+				fr = new FileWriter(file, true);
+				br = new BufferedWriter(fr);
+				br.write(jsondata + "|");
+				br.close();
+				fr.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+}
+
 	}
 }
