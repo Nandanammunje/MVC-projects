@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import javax.sound.sampled.LineEvent.Type;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -30,6 +31,7 @@ import org.apache.jcs.JCS;
 import org.apache.jcs.access.exception.CacheException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.libra.ftp.Constants.BackendConstants;
@@ -44,11 +46,9 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 	@Override
 	public String[] GetDocList() {
 		// TODO Auto-generated method stub
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpPost post = new HttpPost(BackendConstants.LIBRAARCHIVELISTURL);
-
-		String BookList[] = null;
 		JCS cache;
+		String BookList[] = null;
+		String Content = null;
 		try {
 			cache = JCS.getInstance("library");
 			BookList = (String[]) cache.get("Books");
@@ -58,11 +58,20 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 				System.out.println("extracted from cache");
 			} else {
 				logger.info("cache status before addition" + cache.getStats());
-				HttpResponse response = client.execute(post);
-				HttpEntity entity = response.getEntity();
-				String content = EntityUtils.toString(entity);
+
+				WebTarget target = ClientBuilder.newClient().target(BackendConstants.LIBRAARCHIVELISTURL);
+				try {
+
+					Response resp = target.request().async().post(Entity.text(" ")).get();
+					Content = resp.readEntity(String.class);
+					
+				} catch (Exception e) {
+					
+					Content = GetSyncLibraBookList();
+				}
+
 				ObjectMapper mapper = new ObjectMapper();
-				BookList = mapper.readValue(content, String[].class);
+				BookList = mapper.readValue(Content, String[].class);
 				cache.put("Books", BookList);
 				logger.info("cache status after addition " + cache.getStats());
 
@@ -72,6 +81,7 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 			e.printStackTrace();
 			logger.error("Exception occured" + e);
 		}
+
 		return BookList;
 	}
 
@@ -163,7 +173,7 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 				response = targetMQ.request().async().post(Entity.entity(json, MediaType.APPLICATION_JSON)).get();
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
-             PushLibraDownloadReport(json);
+				PushLibraDownloadReport(json);
 			}
 
 		} catch (IOException e) {
@@ -193,7 +203,7 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-}
+		}
 
 	}
 
@@ -205,7 +215,7 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 		UploadReport report = new UploadReport();
 		report.setName(filename);
 		report.setLogtime(dateformat.format(new Date()));
-		
+
 		try {
 
 			ObjectMapper map = new ObjectMapper();
@@ -215,7 +225,7 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 				response = targetMQ.request().async().post(Entity.entity(json, MediaType.APPLICATION_JSON)).get();
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
-             PushLibraUploadReport(json);
+				PushLibraUploadReport(json);
 			}
 
 		} catch (IOException e) {
@@ -223,9 +233,8 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 			logger.error("failed to push data" + e);
 		}
 	}
-	
-	public void PushLibraUploadReport(String jsondata)
-	{
+
+	public void PushLibraUploadReport(String jsondata) {
 		SimpleDateFormat logdate = new SimpleDateFormat(BackendConstants.WEBSVCLOGPATTERN);
 		String path = BackendConstants.WEBSVCLOGUPLOAD + "-" + logdate.format(new Date()) + BackendConstants.LOGEXT;
 		File file = new File(path);
@@ -245,7 +254,26 @@ public class FileDownloadDaoImpl implements FileDownloadDao {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-}
+		}
 
 	}
+
+	public String GetSyncLibraBookList() {
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(BackendConstants.LIBRAARCHIVELISTURL);
+		String content = null;
+		try {
+
+			HttpResponse response = client.execute(post);
+			HttpEntity entity = response.getEntity();
+			content = EntityUtils.toString(entity);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error("Exception occured" + e);
+		}
+		return content;
+	}
+
 }
