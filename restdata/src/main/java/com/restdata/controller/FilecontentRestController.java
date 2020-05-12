@@ -24,7 +24,7 @@ public class FilecontentRestController {
 		
 		List<String> filelist=new ArrayList<String>();
 		Collections.addAll(filelist,filecontentservice.filecontent());
-		
+		System.out.println(filecontentservice.filecontent());
 		return filelist;
 		
 	}
