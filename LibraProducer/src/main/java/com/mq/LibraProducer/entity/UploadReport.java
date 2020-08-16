@@ -1,7 +1,7 @@
 package com.mq.LibraProducer.entity;
 
 public class UploadReport {
-	
+
 	private String name;
 	private String logtime;
 

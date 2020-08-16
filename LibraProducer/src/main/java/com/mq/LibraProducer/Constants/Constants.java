@@ -9,6 +9,6 @@ public class Constants {
 	public static final String WEBSVCLOGUPLOAD = "C:/WebsvcLogs/WebsvcUplog";
 	public static final String UPLOADTYPE = "upload";
 	public static final String DOWNLOADTYPE = "download";
-	public static final String MQEXCHANGE="Libra.report";
+	public static final String MQEXCHANGE = "Libra.report";
 
 }
